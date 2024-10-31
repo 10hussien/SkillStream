@@ -66,5 +66,7 @@ class Kernel extends HttpKernel
         'setapplang' => \App\Http\Middleware\SetAppLang::class,
         'owner' => \App\Http\Middleware\Owner::class,
         'teacher' => \App\Http\Middleware\Teacher::class,
+        'controlCourse' => \App\Http\Middleware\ControlCourse::class,
+        'controlVideo' => \App\Http\Middleware\ControlVideo::class,
     ];
 }

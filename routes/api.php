@@ -34,9 +34,13 @@ Route::middleware(['auth:sanctum', 'setapplang', 'owner'])->group(function () {
 
 Route::middleware(['auth:sanctum', 'setapplang', 'teacher'])->group(function () {
     Route::post('addCourse', [CourseController::class, 'addCourse']);
-    Route::post('updateCourse/{user_id}', [CourseController::class, 'updateCourse']);
-    Route::get('deleteCourse/{user_id}', [CourseController::class, 'deleteCourse']);
 });
+
+Route::middleware(['auth:sanctum', 'setapplang', 'controlCourse'])->group(function () {
+    Route::post('updateCourse/{course_id}', [CourseController::class, 'updateCourse']);
+    Route::get('deleteCourse/{course_id}', [CourseController::class, 'deleteCourse']);
+});
+
 
 Route::middleware(['auth:sanctum', 'setapplang'])->group(function () {
     Route::get('showCourse/{id}', [CourseController::class, 'showCourse']);
@@ -52,8 +56,13 @@ Route::middleware(['auth:sanctum', 'setapplang'])->group(function () {
 });
 
 //add middleware
-Route::middleware(['auth:sanctum', 'setapplang'])->group(function () {
+Route::middleware(['auth:sanctum', 'setapplang', 'controlCourse'])->group(function () {
     Route::post('addVideo/{course_id}', [VideoCourseController::class, 'addVideo']);
+    Route::post('updateVideo/{video_course_id}', [VideoCourseController::class, 'updateVideo']);
+    Route::get('deleteVideo/{video_course_id}', [VideoCourseController::class, 'deleteVideo']);
+});
+
+Route::middleware(['auth:sanctum', 'setapplang', 'controlVideo'])->group(function () {
     Route::post('updateVideo/{video_course_id}', [VideoCourseController::class, 'updateVideo']);
     Route::get('deleteVideo/{video_course_id}', [VideoCourseController::class, 'deleteVideo']);
 });

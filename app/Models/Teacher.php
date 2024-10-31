@@ -27,10 +27,6 @@ class Teacher extends Model
         return $this->hasMany(Course::class);
     }
 
-    public function videoTeacher()
-    {
-        return $this->hasManyThrough(VideoCourse::class, Course::class);
-    }
 
     public function follower()
     {
