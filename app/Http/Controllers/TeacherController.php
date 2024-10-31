@@ -46,11 +46,7 @@ class TeacherController extends Controller
 
                 $teacher = $user->teacher;
 
-                $teacher['cv'] = Teacher::Link($teacher['cv']);
-
                 $profile = $user->profile;
-
-                $profile['personal_photo'] = Profile::Link($profile['personal_photo']);
             }
         }
 
@@ -67,9 +63,6 @@ class TeacherController extends Controller
             return response()->json((new translate)->translate($user));
         }
 
-
-        $user->teacher->cv = Teacher::Link($user->teacher->cv);
-
         $profile = $user->profile;
         return response()->json($user);
     }
@@ -84,8 +77,6 @@ class TeacherController extends Controller
 
             return response()->json((new translate)->translate($user));
         }
-
-        $user->teacher->cv = Teacher::Link($user->teacher->cv);
 
         return response()->json($user);
     }

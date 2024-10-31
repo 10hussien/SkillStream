@@ -2,64 +2,43 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\QuestionOptionRequest;
+use App\Models\QuestionBank;
 use App\Models\QuestionOption;
-use Illuminate\Http\Request;
+use App\utils\translate;
 
 class QuestionOptionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function addQuestionOption($options, $question_id)
     {
-        //
-    }
+        $question = QuestionBank::Question($question_id);
+        if ($question == 'this question not found') {
+            return response()->json((new translate)->translate($question), 404);
+        }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        // $options = $request->input('options');
+        if (!$options) {
+            return response()->json((new translate)->translate('you are not any option to questions'), 404);
+        }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(QuestionOption $questionOption)
-    {
-        //
-    }
+        foreach ($options as $option) {
+            $add = QuestionOption::create([
+                'question_bank_id' => $question_id,
+                'option_text' => $option['option_text'],
+                'is_correct' => $option['is_correct']
+            ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(QuestionOption $questionOption)
-    {
-        //
-    }
+            if (isset($option['interpretation']) && !empty($option['interpretation'])) {
+                $add['interpretation'] = $option['interpretation'];
+                $add->save();
+            }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, QuestionOption $questionOption)
-    {
-        //
-    }
+            if (!$add) {
+                return response()->json((new translate)->translate('There was a problem adding, please try again later.'), 404);
+            }
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(QuestionOption $questionOption)
-    {
-        //
+        return response()->json((new translate)->translate('All options added'), 200);
     }
 }

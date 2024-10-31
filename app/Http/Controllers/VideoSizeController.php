@@ -2,64 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ResolutionRequest;
+use App\Models\VideoCourse;
 use App\Models\VideoSize;
-use Illuminate\Http\Request;
+use App\utils\translate;
 
 class VideoSizeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    public function showResolutionVideo($video_course_id)
     {
-        //
+        $videoCourse = VideoCourse::find($video_course_id);
+
+        if (!$videoCourse) {
+
+            return response()->json((new translate)->translate('this are video not found'), 404);
+        }
+
+        $resolution = $videoCourse->videoSize;
+
+        return response()->json($resolution, 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function changeResolution(ResolutionRequest $request, $video_course_id)
     {
-        //
-    }
+        $videoCourse = VideoCourse::find($video_course_id);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        if (!$videoCourse) {
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(VideoSize $videoSize)
-    {
-        //
-    }
+            return response()->json((new translate)->translate('this are video not found'), 404);
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(VideoSize $videoSize)
-    {
-        //
-    }
+        $resolution = VideoSize::where('resolution', $request->resolution)->first();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, VideoSize $videoSize)
-    {
-        //
-    }
+        $videoCourse['video'] = $resolution->video;
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(VideoSize $videoSize)
-    {
-        //
+        return response()->json($videoCourse->video, 200);
     }
 }

@@ -11,6 +11,7 @@ class CommentProject extends Model
     protected $fillable = [
         'user_id',
         'course_project_id',
+        'file',
         'comment'
     ];
 
@@ -22,5 +23,26 @@ class CommentProject extends Model
     public function projectCourse()
     {
         return $this->belongsTo(CourseProject::class);
+    }
+
+    public function getFileAttribute($file)
+    {
+
+        if ($file === null) {
+            return null;
+        } else {
+
+            $extension = explode(".", $file);
+
+            if (
+                $extension[1] == 'mp4' ||
+                $extension[1] == 'avi' ||
+                $extension[1] == 'mov'
+            ) {
+                return asset('videos/' . $file);
+            } else {
+                return asset('images/' . $file);
+            }
+        }
     }
 }

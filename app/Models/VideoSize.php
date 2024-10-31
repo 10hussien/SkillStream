@@ -11,11 +11,16 @@ class VideoSize extends Model
     protected $fillable = [
         'video_course_id',
         'video',
-        'video_size',
+        'resolution',
     ];
 
     public function VideoCourse()
     {
         return $this->belongsTo(VideoCourse::class);
+    }
+
+    public function getVideoAttribute($video)
+    {
+        return asset('videos/' . $video);
     }
 }

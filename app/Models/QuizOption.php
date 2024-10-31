@@ -10,7 +10,7 @@ class QuizOption extends Model
     use HasFactory;
     protected $fillable = [
         'quizzes_id',
-        'question_text',
+        'option_text',
         'is_correct',
         'Interpretation'
     ];
@@ -18,5 +18,9 @@ class QuizOption extends Model
     public function quiz()
     {
         return $this->belongsTo(Quiz::class);
+    }
+    public function answer()
+    {
+        return $this->hasOne(QuizAnswer::class, 'quiz_options_id', 'id');
     }
 }

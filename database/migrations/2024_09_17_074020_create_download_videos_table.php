@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('download_videos', function (Blueprint $table) {
@@ -16,7 +13,6 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('video_course_id');
             $table->enum('download_status', ['Download stopped', 'Downloading', 'Download finished']);
-            $table->timestamp('download_date');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('video_course_id')->references('id')->on('video_courses')->onDelete('cascade');

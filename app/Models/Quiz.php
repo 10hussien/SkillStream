@@ -12,7 +12,8 @@ class Quiz extends Model
     protected $fillable = [
         'video_course_id',
         'question_text',
-        'question_type'
+        'question_type',
+        'marks'
     ];
 
 
@@ -23,11 +24,21 @@ class Quiz extends Model
 
     public function option()
     {
-        return $this->hasMany(QuizOption::class);
+        return $this->hasMany(QuizOption::class, 'quizzes_id', 'id');
     }
 
     public function quizAnswer()
     {
-        return $this->belongsToMany(QuizAnswer::class);
+        return $this->belongsToMany(QuizAnswer::class, 'quizzes_id', 'id');
+    }
+
+
+    public function scopeQuiz($query, $id)
+    {
+        $question = Quiz::find($id);
+        if (!$question) {
+            return 'this question not found';
+        }
+        return $question;
     }
 }

@@ -3,63 +3,43 @@
 namespace App\Http\Controllers;
 
 use App\Models\ScoreFinal;
-use Illuminate\Http\Request;
+use App\utils\translate;
+use Illuminate\Support\Facades\Auth;
 
 class ScoreFinalController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function scoreFinalForUser($course_id)
     {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        $questionAswnsers = (new QuestionAnswerController)->solvedUser($course_id);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $scor = 0;
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(ScoreFinal $scoreFinal)
-    {
-        //
-    }
+        if ($questionAswnsers->original == (new translate)->translate('you didnt  solved any question to this course')) {
+            return response()->json((new translate)->translate($questionAswnsers->original), 404);
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ScoreFinal $scoreFinal)
-    {
-        //
-    }
+        if ($questionAswnsers->original == (new translate)->translate('you didnt had any solved to question for this course')) {
+            return response()->json((new translate)->translate($questionAswnsers->original), 404);
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, ScoreFinal $scoreFinal)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(ScoreFinal $scoreFinal)
-    {
-        //
+        foreach ($questionAswnsers->original as $questionAswnser) {
+
+            $question = $questionAswnser->questionBank;
+
+            if ($questionAswnser->is_correct) {
+
+                $scor += $question->marks;
+            }
+        }
+
+        ScoreFinal::FirstOrCreate([
+            'user_id' => Auth::id(),
+            'course_id' => $course_id,
+            'score' => $scor
+        ]);
+
+        return response()->json([(new translate)->translate('marks Final') => $scor]);
     }
 }

@@ -12,7 +12,8 @@ class UserProject extends Model
         'user_id',
         'course_project_id',
         'project_link',
-        'project_score'
+        'marks',
+        'project_score',
     ];
 
     public function user()
@@ -22,6 +23,6 @@ class UserProject extends Model
 
     public function projectCourse()
     {
-        return $this->belongsTo(CourseProject::class);
+        return $this->belongsTo(CourseProject::class, 'course_project_id', 'id');
     }
 }

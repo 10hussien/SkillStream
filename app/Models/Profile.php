@@ -44,9 +44,9 @@ class Profile extends Model
         return $user;
     }
 
-    public function scopeLink($query, $image)
+
+    public function getPersonalPhotoAttribute($personal_photo)
     {
-        $image = asset('images/' . $image);
-        return $image;
+        return asset('images/' . $personal_photo);
     }
 }

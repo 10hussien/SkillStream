@@ -10,14 +10,11 @@ class FollowerTeacher extends Model
     use HasFactory;
     protected $fillable = [
         'user_id',
-        'teacher_id'
+        'follower_id'
     ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-    public function teacher()
-    {
-        return $this->belongsTo(Teacher::class);
     }
 }

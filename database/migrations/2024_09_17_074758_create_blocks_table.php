@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('blocks', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user1_id');
-            $table->unsignedBigInteger('user2_id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('blocked_user_id');
             $table->timestamps();
-            $table->foreign('user1_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('user2_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('blocked_user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

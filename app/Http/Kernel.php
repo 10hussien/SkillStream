@@ -68,5 +68,8 @@ class Kernel extends HttpKernel
         'teacher' => \App\Http\Middleware\Teacher::class,
         'controlCourse' => \App\Http\Middleware\ControlCourse::class,
         'controlVideo' => \App\Http\Middleware\ControlVideo::class,
+        'downloadVideo' => \App\Http\Middleware\DownloadVideo::class,
+        'controlComment' => \App\Http\Middleware\ControlComment::class,
+        'controlCommentApp' => \App\Http\Middleware\ControlCommentApp::class,
     ];
 }

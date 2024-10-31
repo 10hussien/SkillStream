@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('question_banks', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('course_id');
-            $table->string('question_text');
+            $table->text('question_text');
             $table->enum('question_type', ['multiple choice', 'True or false']);
             $table->enum('difficulty_level', ['hard', 'easy']);
+            $table->integer('marks')->default(0);
             $table->timestamps();
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
         });

@@ -27,14 +27,6 @@ class Teacher extends Model
         return $this->hasMany(Course::class);
     }
 
-
-    public function follower()
-    {
-        return $this->belongsToMany(FollowerTeacher::class);
-    }
-
-
-
     public function scopeTeacher($query, $id)
     {
         $user = User::with('teacher')->find($id);
@@ -44,9 +36,9 @@ class Teacher extends Model
         return $user;
     }
 
-    public function scopeLink($query, $cv)
+
+    public function getCvAttribute($cv)
     {
-        $cv = asset('pdfs/' . $cv);
-        return $cv;
+        return asset('pdfs/' . $cv);
     }
 }

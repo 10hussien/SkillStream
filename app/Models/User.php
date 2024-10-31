@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Psy\VersionUpdater\Downloader;
+
 
 class User extends Authenticatable
 {
@@ -74,35 +74,47 @@ class User extends Authenticatable
         return $this->hasManyThrough(VideoCourse::class, Course::class);
     }
 
+    public function views()
+    {
+        return $this->belongsToMany(VideoCourse::class, 'video_views', 'user_id', 'video_course_id')
+            ->orderBy('video_views.created_at', 'desc');
+    }
 
     public function downloadVideo()
     {
-        return $this->belongsToMany(VideoCourse::class);
+        return $this->belongsToMany(VideoCourse::class, 'download_videos', 'user_id', 'video_course_id');
     }
+
+
     public function quizAnswer()
     {
         return $this->belongsToMany(QuizAnswer::class);
     }
+
     public function questionAnswer()
     {
         return $this->belongsToMany(QuestionAnswer::class);
     }
+
     public function scoreQuiz()
     {
         return $this->belongsToMany(QuizScore::class);
     }
+
     public function scoreFinal()
     {
         return $this->belongsToMany(ScoreFinal::class);
     }
 
+
     public function projectUser()
     {
-        return $this->belongsToMany(UserProject::class);
+        return $this->belongsToMany(CourseProject::class, 'user_projects', 'user_id', 'course_project_id');
     }
+
     public function comment()
     {
-        return $this->belongsToMany(CommentProject::class);
+        return $this->belongsToMany(CourseProject::class, 'comment_projects', 'user_id', 'course_project_id');
     }
 
     public function resources()
@@ -114,19 +126,35 @@ class User extends Authenticatable
     {
         return $this->hasMany(Search::class);
     }
+
     public function commentApplication()
     {
         return $this->hasMany(CommentApplication::class);
     }
-    public function follower()
+
+    public function followers()
     {
-        return $this->belongsToMany(FollowerTeacher::class);
+        return $this->belongsToMany(User::class, 'follower_teachers', 'user_id', 'follower_id');
     }
 
-    public function block()
+    public function following()
     {
-        return $this->belongsToMany(Block::class);
+        return $this->belongsToMany(User::class, 'follower_teachers', 'follower_id', 'user_id');
     }
+
+
+    public function blockedUsers()
+    {
+
+        return $this->belongsToMany(User::class, 'blocks', 'user_id', 'blocked_user_id');
+    }
+
+    public function blockedBy()
+    {
+
+        return $this->belongsToMany(User::class, 'blocks', 'blocked_user_id', 'user_id');
+    }
+
 
     public function scopeUser($query, $id)
     {

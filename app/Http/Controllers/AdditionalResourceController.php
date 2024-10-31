@@ -2,64 +2,72 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ResourcesRequest;
 use App\Models\AdditionalResource;
+use App\Models\Course;
+use App\utils\translate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdditionalResourceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function addResources(ResourcesRequest $request, $course_id)
     {
-        //
+        $course = Course::Course($course_id);
+        if ($course == 'There are no course') {
+            return response()->json((new translate)->translate($course), 404);
+        }
+        $resources = $request->input('resources');
+        foreach ($resources as $resource) {
+            $add = AdditionalResource::create([
+                'course_id' => $course_id,
+                'resources_type' => $resource['resources_type'],
+                'resources_link' => $resource['resources_link']
+            ]);
+            if (!$add) {
+                return response()->json((new translate)->translate('There was a problem adding the resource. Please try again later.'), 404);
+            }
+        }
+        return response()->json((new translate)->translate('Add resources has been successfully.'), 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function deleteResourse($resource_id)
     {
-        //
+
+        $resource = AdditionalResource::find($resource_id);
+        if (!$resource) {
+            return response()->json((new translate)->translate('this resource not found'), 404);
+        }
+        $delete = $resource->delete();
+        if (!$delete) {
+            return response()->json((new translate)->translate('There was a problem delete the resource.'), 404);
+        }
+        return response()->json((new translate)->translate('Delete resources has been successfully.'), 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function showDescriptionResource($resource_id)
     {
-        //
+        $resource = AdditionalResource::find($resource_id);
+        if (!$resource) {
+            return response()->json((new translate)->translate('this resource not found'), 404);
+        }
+        $course = $resource->course;
+
+        return response()->json($resource, 200);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(AdditionalResource $additionalResource)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(AdditionalResource $additionalResource)
+    public function showAllResourcesForCourse($course_id)
     {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, AdditionalResource $additionalResource)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(AdditionalResource $additionalResource)
-    {
-        //
+        $course = Course::Course($course_id);
+        if ($course == 'There are no course') {
+            return response()->json((new translate)->translate($course), 404);
+        }
+        $resource = $course->resources;
+        if ($resource->isEmpty()) {
+            return response()->json((new translate)->translate('this course dose not have any resource'), 404);
+        }
+        return response()->json($course, 200);
     }
 }

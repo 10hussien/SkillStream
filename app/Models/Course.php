@@ -33,6 +33,10 @@ class Course extends Model
     {
         return $this->hasMany(VideoCourse::class);
     }
+    public function sizeVideos()
+    {
+        return $this->hasManyThrough(VideoSize::class, VideoCourse::class);
+    }
 
     public function quizzes()
     {
@@ -42,6 +46,11 @@ class Course extends Model
     public function questionBank()
     {
         return $this->hasMany(QuestionBank::class);
+    }
+
+    public function answerQuestion()
+    {
+        return $this->hasManyThrough(QuestionAnswer::class, QuestionBank::class);
     }
 
     public function scoreFinal()
@@ -63,7 +72,7 @@ class Course extends Model
 
     public function resources()
     {
-        return $this->belongsToMany(AdditionalResource::class);
+        return $this->hasMany(AdditionalResource::class);
     }
 
     public function scopeCourse($query, $id)

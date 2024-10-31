@@ -6,9 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+
     public function up(): void
     {
         Schema::create('course_projects', function (Blueprint $table) {
@@ -18,15 +16,12 @@ return new class extends Migration
             $table->text('project_description');
             $table->date('project_start');
             $table->date('project_end');
-            $table->enum('project_status', ['Not start', 'started', 'finshed']);
+            $table->enum('project_status', ['Not start', 'started', 'finshed'])->default('Not start');
             $table->timestamps();
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('course_projects');

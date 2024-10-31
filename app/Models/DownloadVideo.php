@@ -13,7 +13,6 @@ class DownloadVideo extends Model
         'user_id',
         'video_course_id',
         'download_status',
-        'download_date'
     ];
 
     public function user()

@@ -23,6 +23,8 @@ class VideoCourseRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'video' => 'file|mimes:mp4,mov,avi,wmv|nullable',
+            'video_url' => 'url|nullable',
             'description' => 'required|string',
             'title' => 'required|string',
             'thumbnail' => 'required|image|mimes:png,jpg,svg,web,jpeg|max:2048',
@@ -32,7 +34,7 @@ class VideoCourseRequest extends FormRequest
     public function messages()
     {
         return [
-
+            'video' => (new translate)->translate('Please enter a video .'),
             'description' => (new translate)->translate('Please enter a video description..'),
             'title' => (new translate)->translate('Please enter a video title.'),
             'thumbnail' => (new translate)->translate('Please enter a video thumbnail.'),

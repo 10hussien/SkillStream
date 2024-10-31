@@ -24,10 +24,20 @@ class CourseProject extends Model
 
     public function userProject()
     {
-        return $this->belongsToMany(UserProject::class);
+        return $this->belongsToMany(User::class, 'user_projects', 'course_project_id', 'user_id');
     }
+
     public function comment()
     {
-        return $this->belongsToMany(CommentProject::class);
+        return $this->belongsToMany(User::class, 'comment_projects', 'course_project_id', 'user_id');
+    }
+
+    public function scopeProject($query, $project_id)
+    {
+        $project = CourseProject::find($project_id);
+        if (!$project) {
+            return 'this project not found';
+        }
+        return $project;
     }
 }

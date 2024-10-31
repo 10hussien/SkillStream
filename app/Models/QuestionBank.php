@@ -20,7 +20,7 @@ class QuestionBank extends Model
         return $this->belongsTo(Course::class);
     }
 
-    public function option()
+    public function Questionoption()
     {
         return $this->hasMany(QuestionOption::class);
     }
@@ -28,5 +28,15 @@ class QuestionBank extends Model
     public function questionAnswer()
     {
         return $this->belongsToMany(QuestionAnswer::class);
+    }
+
+    public function scopeQuestion($query, $id)
+    {
+        $question = QuestionBank::find($id);
+        if (!$question) {
+            return 'this question not found';
+        }
+
+        return $question;
     }
 }

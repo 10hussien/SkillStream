@@ -38,15 +38,6 @@ class ProfileController extends Controller
             return response()->json((new translate)->translate($myProfile));
         }
 
-        // $filteredProfile = array_filter($myProfile->toArray(), function ($value) {
-
-        //     return !is_null($value);
-        // });
-
-
-        $myProfile->profile->personal_photo = Profile::Link($myProfile->profile->personal_photo);
-
-
         return response()->json($myProfile);
     }
 
@@ -59,12 +50,6 @@ class ProfileController extends Controller
             return response()->json((new translate)->translate($myProfile));
         }
 
-        // $filteredProfile = array_filter($profile->toArray(), function ($value) {
-        //     return !is_null($value);
-        // });
-
-        $myProfile->profile->personal_photo = Profile::Link($myProfile->profile->personal_photo);
-
         return response()->json($myProfile);
     }
 
@@ -76,13 +61,14 @@ class ProfileController extends Controller
         $myProfile = Profile::Profile(Auth::id());
 
         if ($myProfile == 'User not found' || $myProfile == 'Profile not found') {
+
             return response()->json((new translate)->translate($myProfile));
         }
 
         $profile = $myProfile->profile;
 
-
         $myProfile->update($request->all());
+
         $myProfile->save();
 
         $profile->update($request->all());
@@ -93,8 +79,6 @@ class ProfileController extends Controller
 
             $profile->save();
         }
-
-
 
         return response()->json((new translate)->translate('update profile has been successfully'));
     }

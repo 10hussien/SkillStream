@@ -13,7 +13,15 @@ return new class extends Migration
     {
         Schema::create('course_conversations', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('course_id');
+            $table->unsignedBigInteger('sender_id');
+            $table->string('image')->nullable();
+            $table->string('video')->nullable();
+            $table->string('pdf')->nullable();
+            $table->text('message');
             $table->timestamps();
+            $table->foreign('sender_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
         });
     }
 
